@@ -1,3 +1,6 @@
+import { getCurrentLocale, toAcceptLanguage, translate, type Locale } from '../i18n'
+import type { TranslationKey } from '../i18n/locales/ko'
+
 export interface User {
   id: number
   email: string
@@ -28,13 +31,20 @@ export function clearStoredToken(): void {
   localStorage.removeItem(TOKEN_KEY)
 }
 
+function getFallbackErrorMessage(locale: Locale): string {
+  return translate(locale, 'common.requestError' as TranslationKey)
+}
+
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const token = getStoredToken()
+  const locale = getCurrentLocale()
   const headers = new Headers(options.headers)
 
   if (!headers.has('Content-Type') && options.body) {
     headers.set('Content-Type', 'application/json')
   }
+
+  headers.set('Accept-Language', toAcceptLanguage(locale))
 
   if (token) {
     headers.set('Authorization', `Bearer ${token}`)
@@ -46,7 +56,9 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   })
 
   if (!response.ok) {
-    const error = (await response.json().catch(() => ({ message: '요청 처리 중 오류가 발생했습니다.' }))) as ApiError
+    const error = (await response.json().catch(() => ({
+      message: getFallbackErrorMessage(locale),
+    }))) as ApiError
     throw new Error(error.message)
   }
 

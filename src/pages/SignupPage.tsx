@@ -9,10 +9,12 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { AuthLayout } from '../components/AuthLayout'
 import { useAuth } from '../contexts/AuthContext'
+import { useLocale } from '../contexts/LocaleContext'
 
 export function SignupPage() {
   const navigate = useNavigate()
   const { signup } = useAuth()
+  const { t } = useLocale()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -28,17 +30,17 @@ export function SignupPage() {
       await signup(name, email, password)
       navigate('/')
     } catch (err) {
-      setError(err instanceof Error ? err.message : '회원가입에 실패했습니다.')
+      setError(err instanceof Error ? err.message : t('signup.failed'))
     } finally {
       setIsSubmitting(false)
     }
   }
 
   return (
-    <AuthLayout title="회원가입" subtitle="새 계정을 만들고 플랫폼을 이용해 보세요.">
+    <AuthLayout title={t('signup.title')} subtitle={t('signup.subtitle')}>
       <form className="space-y-5" onSubmit={handleSubmit}>
         <label className="block">
-          <span className="mb-2 block text-sm font-medium text-slate-700">이름</span>
+          <span className="mb-2 block text-sm font-medium text-slate-700">{t('common.name')}</span>
           <div className="relative">
             <FontAwesomeIcon
               icon={faUser}
@@ -51,13 +53,13 @@ export function SignupPage() {
               value={name}
               onChange={(event) => setName(event.target.value)}
               className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 outline-none transition focus:border-brand-400 focus:bg-white focus:ring-2 focus:ring-brand-100"
-              placeholder="홍길동"
+              placeholder={t('signup.namePlaceholder')}
             />
           </div>
         </label>
 
         <label className="block">
-          <span className="mb-2 block text-sm font-medium text-slate-700">이메일</span>
+          <span className="mb-2 block text-sm font-medium text-slate-700">{t('common.email')}</span>
           <div className="relative">
             <FontAwesomeIcon
               icon={faEnvelope}
@@ -75,7 +77,7 @@ export function SignupPage() {
         </label>
 
         <label className="block">
-          <span className="mb-2 block text-sm font-medium text-slate-700">비밀번호</span>
+          <span className="mb-2 block text-sm font-medium text-slate-700">{t('common.password')}</span>
           <div className="relative">
             <FontAwesomeIcon
               icon={faLock}
@@ -88,7 +90,7 @@ export function SignupPage() {
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 outline-none transition focus:border-brand-400 focus:bg-white focus:ring-2 focus:ring-brand-100"
-              placeholder="8자 이상"
+              placeholder={t('signup.passwordPlaceholder')}
             />
           </div>
         </label>
@@ -103,14 +105,14 @@ export function SignupPage() {
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand-500 px-4 py-3 font-semibold text-white transition hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-60"
         >
           <FontAwesomeIcon icon={faUserPlus} />
-          {isSubmitting ? '가입 중...' : '회원가입'}
+          {isSubmitting ? t('signup.submitting') : t('signup.submit')}
         </button>
       </form>
 
       <p className="mt-6 text-center text-sm text-slate-500">
-        이미 계정이 있으신가요?{' '}
+        {t('signup.hasAccount')}{' '}
         <Link to="/login" className="font-semibold text-brand-600 hover:text-brand-700">
-          로그인
+          {t('signup.loginLink')}
         </Link>
       </p>
     </AuthLayout>

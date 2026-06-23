@@ -4,10 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope, faLock, faRightToBracket } from '@fortawesome/free-solid-svg-icons'
 import { AuthLayout } from '../components/AuthLayout'
 import { useAuth } from '../contexts/AuthContext'
+import { useLocale } from '../contexts/LocaleContext'
 
 export function LoginPage() {
   const navigate = useNavigate()
   const { login } = useAuth()
+  const { t } = useLocale()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -22,17 +24,17 @@ export function LoginPage() {
       await login(email, password)
       navigate('/')
     } catch (err) {
-      setError(err instanceof Error ? err.message : '로그인에 실패했습니다.')
+      setError(err instanceof Error ? err.message : t('login.failed'))
     } finally {
       setIsSubmitting(false)
     }
   }
 
   return (
-    <AuthLayout title="로그인" subtitle="계정으로 로그인하고 서비스를 시작하세요.">
+    <AuthLayout title={t('login.title')} subtitle={t('login.subtitle')}>
       <form className="space-y-5" onSubmit={handleSubmit}>
         <label className="block">
-          <span className="mb-2 block text-sm font-medium text-slate-700">이메일</span>
+          <span className="mb-2 block text-sm font-medium text-slate-700">{t('common.email')}</span>
           <div className="relative">
             <FontAwesomeIcon
               icon={faEnvelope}
@@ -50,7 +52,7 @@ export function LoginPage() {
         </label>
 
         <label className="block">
-          <span className="mb-2 block text-sm font-medium text-slate-700">비밀번호</span>
+          <span className="mb-2 block text-sm font-medium text-slate-700">{t('common.password')}</span>
           <div className="relative">
             <FontAwesomeIcon
               icon={faLock}
@@ -62,7 +64,7 @@ export function LoginPage() {
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3 pl-11 pr-4 outline-none transition focus:border-brand-400 focus:bg-white focus:ring-2 focus:ring-brand-100"
-              placeholder="비밀번호 입력"
+              placeholder={t('login.passwordPlaceholder')}
             />
           </div>
         </label>
@@ -77,14 +79,14 @@ export function LoginPage() {
           className="flex w-full items-center justify-center gap-2 rounded-xl bg-brand-500 px-4 py-3 font-semibold text-white transition hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-60"
         >
           <FontAwesomeIcon icon={faRightToBracket} />
-          {isSubmitting ? '로그인 중...' : '로그인'}
+          {isSubmitting ? t('login.submitting') : t('login.submit')}
         </button>
       </form>
 
       <p className="mt-6 text-center text-sm text-slate-500">
-        계정이 없으신가요?{' '}
+        {t('login.noAccount')}{' '}
         <Link to="/signup" className="font-semibold text-brand-600 hover:text-brand-700">
-          회원가입
+          {t('login.signupLink')}
         </Link>
       </p>
     </AuthLayout>

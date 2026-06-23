@@ -1,33 +1,37 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFileLines, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { useAuth } from '../contexts/AuthContext'
+import { useLocale } from '../contexts/LocaleContext'
 
 export function HomePage() {
   const { user, logout } = useAuth()
+  const { t } = useLocale()
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-sky-50">
       <header className="border-b border-white/70 bg-white/80 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 pr-44">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-500 text-white">
               <FontAwesomeIcon icon={faFileLines} />
             </div>
             <div>
-              <p className="font-semibold text-slate-900">RAG Doc Platform</p>
-              <p className="text-xs text-slate-500">홈</p>
+              <p className="font-semibold text-slate-900">{t('common.appName')}</p>
+              <p className="text-xs text-slate-500">{t('home.title')}</p>
             </div>
           </div>
 
           <div className="flex items-center gap-4">
-            <span className="text-sm text-slate-600">{user?.name}님, 환영합니다</span>
+            <span className="text-sm text-slate-600">
+              {t('home.welcome', { name: user?.name ?? '' })}
+            </span>
             <button
               type="button"
               onClick={logout}
               className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-brand-200 hover:text-brand-700"
             >
               <FontAwesomeIcon icon={faRightFromBracket} />
-              로그아웃
+              {t('home.logout')}
             </button>
           </div>
         </div>
@@ -35,7 +39,7 @@ export function HomePage() {
 
       <main className="mx-auto max-w-6xl px-6 py-16">
         <section className="rounded-3xl border border-dashed border-brand-200 bg-white/70 p-16 text-center shadow-sm">
-          <p className="text-lg text-slate-500">홈 화면 콘텐츠는 추후 추가됩니다.</p>
+          <p className="text-lg text-slate-500">{t('home.empty')}</p>
         </section>
       </main>
     </div>
