@@ -84,7 +84,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy frontend
-        shell: pwsh
+        shell: powershell
         env:
           DEPLOY_PATH: ${{ vars.DEPLOY_PATH }}
           FRONTEND_IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
