@@ -8,6 +8,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  BACKEND_REPO: ehdrlf25-eng/RAG_DOC_BACKEND
 
 permissions:
   contents: read
@@ -61,23 +62,41 @@ jobs:
           cache-to: type=gha,mode=max
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build-and-push
-    if: github.ref == 'refs/heads/main' && secrets.SSH_HOST != ''
+    if: github.ref == 'refs/heads/main'
 
     steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1.2.0
+      - name: Checkout backend deploy files
+        uses: actions/checkout@v4
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT || 22 }}
-          script: |
-            set -e
-            cd ${{ secrets.DEPLOY_PATH || '/opt/rag-doc-platform' }}
-            docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-            export FRONTEND_IMAGE=ghcr.io/${{ github.repository }}:latest
-            docker compose pull frontend
-            docker compose up -d frontend
-            docker image prune -f
+          repository: ${{ env.BACKEND_REPO }}
+          path: backend-deploy
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy frontend
+        shell: pwsh
+        env:
+          DEPLOY_PATH: ${{ vars.DEPLOY_PATH }}
+          FRONTEND_IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+        run: |
+          $defaultDir = Join-Path $env:GITHUB_WORKSPACE 'backend-deploy/deploy'
+          $deployDir = if ($env:DEPLOY_PATH) { $env:DEPLOY_PATH } else { $defaultDir }
+          if (-not (Test-Path $deployDir)) {
+            throw "Deploy directory not found: $deployDir"
+          }
+          Set-Location $deployDir
+          if (-not (Test-Path '.env') -and (Test-Path '.env.example')) {
+            Copy-Item '.env.example' '.env'
+            Write-Warning '.env created from .env.example — update DB/JWT values before use.'
+          }
+          docker compose -f docker-compose.redis.yml -f docker-compose.kafka.yml up -d
+          docker compose -f docker-compose.yml pull frontend
+          docker compose -f docker-compose.yml up -d frontend
+          docker image prune -f

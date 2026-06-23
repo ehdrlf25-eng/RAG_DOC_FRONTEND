@@ -33,7 +33,29 @@ export const ko = {
   'home.title': '홈',
   'home.welcome': '{{name}}님, 환영합니다',
   'home.logout': '로그아웃',
-  'home.empty': '홈 화면 콘텐츠는 추후 추가됩니다.',
+
+  'documents.title': '문서',
+  'documents.upload': '업로드',
+  'documents.uploading': '업로드 중...',
+  'documents.uploadFailed': '문서 업로드에 실패했습니다.',
+  'documents.empty': '업로드된 PDF 문서가 없습니다.',
+  'documents.delete': '문서 삭제',
+  'documents.chunkCount': '{{count}}개 청크',
+  'documents.status.processing': '처리 중',
+  'documents.status.ready': '준비됨',
+  'documents.status.failed': '실패',
+
+  'chat.title': '문서 챗봇',
+  'chat.subtitle': '업로드한 PDF를 기반으로 질문하고 답변을 받아보세요.',
+  'chat.conversations': '대화 목록',
+  'chat.newConversation': '새 대화',
+  'chat.noConversations': '아직 대화가 없습니다.',
+  'chat.defaultTitle': '대화 {{index}}',
+  'chat.empty': '질문을 입력하면 업로드한 문서를 검색해 답변합니다.',
+  'chat.placeholder': '문서에 대해 질문해 보세요...',
+  'chat.send': '전송',
+  'chat.thinking': '답변을 생성하는 중...',
+  'chat.sendFailed': '메시지 전송에 실패했습니다.',
 } as const
 
 export type TranslationKey = keyof typeof ko

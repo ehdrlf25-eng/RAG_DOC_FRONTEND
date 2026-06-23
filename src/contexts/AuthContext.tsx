@@ -1,5 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
-import { authApi, clearStoredToken, getStoredToken, setStoredToken, type User } from '../api/auth'
+import { authApi } from '../api/auth'
+import { clearStoredToken, getStoredToken, setStoredToken } from '../api/client'
+import type { User } from '../api/types'
 
 interface AuthContextValue {
   user: User | null
