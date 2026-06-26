@@ -13,6 +13,10 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null)
 
+/**
+ * 전역 인증 상태.
+ * 마운트 시 localStorage 토큰으로 /api/auth/me를 호출해 세션을 복원한다.
+ */
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -24,6 +28,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return
     }
 
+    // 토큰이 만료·위조된 경우 me 실패 → 토큰 제거 후 비로그인 처리
     authApi
       .me()
       .then(setUser)

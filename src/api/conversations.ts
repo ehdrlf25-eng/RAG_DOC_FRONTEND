@@ -33,6 +33,7 @@ export interface ChatReply {
   sources: SourceChunkItem[]
 }
 
+/** RAG 채팅 대화 API. 메시지 전송 시 검색·LLM 답변이 한 번에 반환된다 */
 export const conversationsApi = {
   list() {
     return apiRequest<ConversationItem[]>('/api/conversations')

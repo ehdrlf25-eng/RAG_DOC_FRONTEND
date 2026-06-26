@@ -11,6 +11,7 @@ import { AuthLayout } from '../components/AuthLayout'
 import { useAuth } from '../contexts/AuthContext'
 import { useLocale } from '../contexts/LocaleContext'
 
+/** 회원가입 폼. 성공 시 자동 로그인(토큰 발급) 후 홈으로 이동 */
 export function SignupPage() {
   const navigate = useNavigate()
   const { signup } = useAuth()

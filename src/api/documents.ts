@@ -12,11 +12,13 @@ export interface DocumentItem {
   updatedAt: string
 }
 
+/** 현재 사용자 소유 PDF 문서 API (서버에서 userId 소유권 검증) */
 export const documentsApi = {
   list() {
     return apiRequest<DocumentItem[]>('/api/documents')
   },
 
+  /** multipart/form-data로 PDF 업로드. 수집·임베딩은 서버에서 동기 처리 */
   upload(file: File) {
     const formData = new FormData()
     formData.append('file', file)

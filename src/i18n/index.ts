@@ -10,6 +10,7 @@ export const LOCALES: { value: Locale; label: string }[] = [
 
 const messages: Record<Locale, Record<TranslationKey, string>> = { ko, en }
 
+/** {{name}} 플레이스홀더 치환 지원 번역 함수 */
 export function translate(
   locale: Locale,
   key: TranslationKey,
@@ -28,10 +29,12 @@ export function translate(
 
 export const LOCALE_STORAGE_KEY = 'ragdoc_locale'
 
+/** 브라우저 언어 설정 기반 기본 로케일 (ko 접두사면 한국어) */
 export function getDefaultLocale(): Locale {
   return navigator.language.startsWith('ko') ? 'ko' : 'en'
 }
 
+/** localStorage 우선, 없으면 브라우저 기본 로케일 */
 export function getCurrentLocale(): Locale {
   const stored = localStorage.getItem(LOCALE_STORAGE_KEY)
   if (stored === 'ko' || stored === 'en') {
@@ -40,6 +43,7 @@ export function getCurrentLocale(): Locale {
   return getDefaultLocale()
 }
 
+/** API 요청용 Accept-Language 헤더 값 */
 export function toAcceptLanguage(locale: Locale): string {
   return locale === 'en' ? 'en' : 'ko'
 }

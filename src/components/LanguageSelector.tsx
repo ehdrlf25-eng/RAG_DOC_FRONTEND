@@ -3,6 +3,7 @@ import { faGlobe } from '@fortawesome/free-solid-svg-icons'
 import { LOCALES } from '../i18n'
 import { useLocale } from '../contexts/LocaleContext'
 
+/** ko/en 로케일 전환 — 변경 시 localStorage 및 API Accept-Language에 반영 */
 export function LanguageSelector() {
   const { locale, setLocale, t } = useLocale()
 

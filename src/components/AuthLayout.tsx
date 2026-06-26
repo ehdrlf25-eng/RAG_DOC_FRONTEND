@@ -9,6 +9,7 @@ interface AuthLayoutProps {
   children: ReactNode
 }
 
+/** 인증 페이지(로그인/회원가입) 공통 레이아웃 — 브랜딩 영역 + 폼 카드 */
 export function AuthLayout({ title, subtitle, children }: AuthLayoutProps) {
   const { t } = useLocale()
 

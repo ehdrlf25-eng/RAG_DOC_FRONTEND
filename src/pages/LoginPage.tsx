@@ -6,6 +6,7 @@ import { AuthLayout } from '../components/AuthLayout'
 import { useAuth } from '../contexts/AuthContext'
 import { useLocale } from '../contexts/LocaleContext'
 
+/** 로그인 폼. 성공 시 AuthContext에 토큰·user 저장 후 홈으로 이동 */
 export function LoginPage() {
   const navigate = useNavigate()
   const { login } = useAuth()

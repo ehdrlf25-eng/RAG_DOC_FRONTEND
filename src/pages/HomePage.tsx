@@ -13,6 +13,7 @@ import { documentsApi, type DocumentItem, type DocumentStatus } from '../api/doc
 import { useAuth } from '../contexts/AuthContext'
 import { useLocale } from '../contexts/LocaleContext'
 
+/** 메인 화면: 문서 업로드·관리와 RAG 채팅을 한 페이지에서 제공 */
 export function HomePage() {
   const { user, logout } = useAuth()
   const { t } = useLocale()
@@ -47,6 +48,7 @@ export function HomePage() {
   const loadConversations = useCallback(async () => {
     const items = await conversationsApi.list()
     setConversations(items)
+    // 첫 로드 시 가장 최근 대화를 자동 선택
     if (items.length > 0) {
       setActiveConversationId((current) => current ?? items[0].id)
     }
@@ -126,6 +128,7 @@ export function HomePage() {
 
     try {
       let conversationId = activeConversationId
+      // 대화가 없으면 첫 메시지 전송 시 자동 생성
       if (conversationId == null) {
         const title = t('chat.defaultTitle', { index: String(conversations.length + 1) })
         const conversation = await conversationsApi.create(title)
@@ -137,6 +140,7 @@ export function HomePage() {
       const reply = await conversationsApi.sendMessage(conversationId, draft.trim())
       setMessages((current) => [...current, reply.userMessage, reply.assistantMessage])
       setDraft('')
+      // 서버가 updatedAt을 갱신하므로 목록 정렬 반영을 위해 로컬 상태도 갱신
       setConversations((current) =>
         current.map((item) =>
           item.id === conversationId

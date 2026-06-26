@@ -7,6 +7,10 @@ import { LoginPage } from './pages/LoginPage'
 import { SignupPage } from './pages/SignupPage'
 import { GuestRoute, ProtectedRoute } from './routes/RouteGuards'
 
+/**
+ * 앱 루트: LocaleProvider → AuthProvider → 라우터.
+ * GuestRoute(로그인·가입) / ProtectedRoute(홈)로 접근을 분리한다.
+ */
 export default function App() {
   return (
     <LocaleProvider>

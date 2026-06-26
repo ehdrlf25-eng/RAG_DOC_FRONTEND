@@ -23,6 +23,7 @@ interface LocaleContextValue {
 
 const LocaleContext = createContext<LocaleContextValue | null>(null)
 
+/** UI 로케일 및 t() 번역 함수 제공. 선택 값은 localStorage에 유지된다. */
 export function LocaleProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>(() => getDefaultLocale())
 
@@ -32,6 +33,7 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
   }, [])
 
   useEffect(() => {
+    // 접근성·브라우저 기본 언어와 동기화
     document.documentElement.lang = locale
   }, [locale])
 
