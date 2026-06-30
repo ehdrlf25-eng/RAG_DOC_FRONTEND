@@ -79,6 +79,20 @@ export function HomePage() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, isSending])
 
+  const hasProcessingDocuments = documents.some((document) => document.status === 'PROCESSING')
+
+  useEffect(() => {
+    if (!hasProcessingDocuments) {
+      return
+    }
+    const intervalId = window.setInterval(() => {
+      void loadDocuments().catch((err: Error) => {
+        setError(err.message)
+      })
+    }, 3000)
+    return () => window.clearInterval(intervalId)
+  }, [hasProcessingDocuments, loadDocuments])
+
   async function handleUpload(file: File) {
     setError(null)
     setIsUploading(true)

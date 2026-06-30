@@ -18,7 +18,7 @@ export const documentsApi = {
     return apiRequest<DocumentItem[]>('/api/documents')
   },
 
-  /** multipart/form-data로 PDF 업로드. 수집·임베딩은 서버에서 동기 처리 */
+  /** multipart/form-data로 PDF 업로드. ingest는 서버에서 Kafka 비동기 처리 */
   upload(file: File) {
     const formData = new FormData()
     formData.append('file', file)
